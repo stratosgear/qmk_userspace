@@ -492,10 +492,12 @@ void leader_end_user(void) {
 }
 
 // Dynamic recording section
-void dynamic_macro_record_start_user(int8_t direction) {
+bool dynamic_macro_record_start_user(int8_t direction) {
     isRecording = true;
+    return true;
 }
 
-void dynamic_macro_record_end_user(int8_t direction) {
+bool dynamic_macro_record_end_user(int8_t direction) {
     isRecording = false;
+    return true;
 }

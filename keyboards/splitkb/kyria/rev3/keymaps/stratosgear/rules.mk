@@ -6,7 +6,7 @@ SRC += features/achordion.c
 CONVERT_TO=rp2040_ce
 
 OLED_ENABLE = yes
-# OLED_DRIVER = SSD1306      # Enables the use of OLED displays
+# OLED_DRIVER = ssd1306      # Enables the use of OLED displays
 
 ENCODER_ENABLE = yes       # Enables the use of one or more encoders
 
