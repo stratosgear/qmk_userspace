@@ -16,3 +16,10 @@ To recompile the firwmare from scratch:
 - Copy the `splitkb_kyria_rev3_stratosgear.uf2` file in it.
 - That keyboard half will reboot with new firware
 - Change power supply to other half and repeat the 4 previous steps.
+
+
+
+## Notes
+
+Consult `./kyria-layouts.png` for the full keymaps.
+(available online at: https://www.keyboard-layout-editor.com/#/gists/48be26feaeb29e429aa2c1c8e00dee31)
