@@ -22,3 +22,6 @@ To recompile the firwmare from scratch:
 
 ## Notes
 
+### Debugging
+
+Open a console and run: `qmk console` to check output from the keyboard.
