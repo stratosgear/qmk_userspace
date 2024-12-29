@@ -73,15 +73,28 @@ enum layers {
 #define LFN2_DEL LT(_FUN2, KC_DELETE)
 
 // OBS helpers
-#define TL_SLF S(KC_F12)    // selfie top left
-#define TR_SLF C(KC_F12)    // selfie top right
-#define BR_SLF A(KC_F12)    // selfie bottom right
-#define BL_SLF S(C(KC_F12)) // selfie bottom left
-#define NO_SLF S(A(KC_F12)) // no selfie
-#define SB4ACT G(KC_F12)    // Stand by for action
+// Reminder: Any keycodes emitted will have to be captured by wayland (hyprland in this case)
+// and dealt with as Global keybinds
+// https://wiki.hyprland.org/hyprland-wiki/pages/Configuring/Binds/#global-keybinds
+#define OBS_SB4ACT G(KC_F12)    // Stand by for action
+#define OBS_CAMONL S(G(KC_F12)) // Camera Only
+
+uint8_t  obs_selected_corner  = 2;
+uint16_t obs_selfie_corners[] = {
+    S(KC_F12),    // selfie appears at top left
+    C(KC_F12),    // selfie appears at top right
+    A(KC_F12),    // selfie appears at bottom right
+    S(C(KC_F12)), // selfie appears at bottom left
+    S(A(KC_F12)), // selfie dissapears
+};
+uint8_t obs_max_selfie_corners = 5;
+bool    obs_camonly            = false;
+bool    obs_sb4action          = false;
 
 enum custom_keycodes {
     SELWORD = SAFE_RANGE,
+    SB4ACT, // OBS: Standby for action scen toggle
+    CAMONL  // OBS: Camera Only scene toggle
     // Other custom keys...
 };
 
@@ -180,7 +193,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUN] = LAYOUT(
 //  * ,--------+--------+--------+--------+--------+--------.                                      ,--------+--------+--------+--------+--------+--------.
-         DT_UP , _______,  KC_F9 ,  KC_F8 ,  KC_F7 , KC_F12 ,                                        _______, _______, _______, _______, _______, _______,
+        DT_UP  , _______,  KC_F9 ,  KC_F8 ,  KC_F7 , KC_F12 ,                                        _______, _______, _______, _______, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------|                                      |--------+--------+--------+--------+--------+--------|
        DT_DOWN , _______,  KC_F6 ,  KC_F5 ,  KC_F4 , KC_F11 ,                                        _______, _______, _______, _______, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
@@ -192,11 +205,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_FUN2] = LAYOUT(
 //  * ,--------+--------+--------+--------+--------+--------.                                      ,--------+--------+--------+--------+--------+--------.
-        TL_SLF , TR_SLF , KC_F19 , KC_F18 , KC_F17 , KC_F22 ,                                        _______, _______, _______, _______, _______, _______,
+        CAMONL , SB4ACT , KC_F19 , KC_F18 , KC_F17 , KC_F22 ,                                        _______, _______, _______, _______, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------|                                      |--------+--------+--------+--------+--------+--------|
-        BL_SLF , BR_SLF , KC_F16 , KC_F15 , KC_F14 , KC_F21 ,                                        _______, _______, _______, _______, _______, _______,
+        _______, _______, KC_F16 , KC_F15 , KC_F14 , KC_F21 ,                                        _______, _______, _______, _______, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
-        NO_SLF , SB4ACT , KC_F13 , KC_F12 , KC_F11 , KC_F20 , _______, _______,    _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, KC_F13 , KC_F12 , KC_F11 , KC_F20 , _______, _______,    _______, _______, _______, _______, _______, _______, _______, _______,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
                                    _______,  KC_TAB,  KC_SPC, KC_BSPC,  KC_ENT,    _______, _______, _______, _______, _______
 //  *                             *.____,*`--------+--------+--------+--------'  `--------+--------+---XXX--+--------'*.____,*
@@ -402,6 +415,22 @@ bool    encoder_update_user(uint8_t index, bool clockwise) {
             case _FUN:
                 clockwise ? tap_code(KC_F3) : tap_code16(S(KC_F3));
                 break;
+            case _FUN2:
+                if (clockwise) {
+                    if (obs_selected_corner == obs_max_selfie_corners - 1) {
+                        obs_selected_corner = 0;
+                    } else {
+                        obs_selected_corner++;
+                    }
+                } else {
+                    if (obs_selected_corner == 0) {
+                        obs_selected_corner = obs_max_selfie_corners - 1;
+                    } else {
+                        obs_selected_corner--;
+                    }
+                }
+                // xprintf("Selected selfie: %d\n", obs_selected_corner);
+                tap_code16(obs_selfie_corners[obs_selected_corner]);
             default:
                 dprintf("Left Encoder. Rotation: %d. Layer: %d\n", clockwise, biton32(layer_state));
         }
@@ -452,7 +481,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         return false;
     }
 
-    // Your macros ...
+    switch (keycode) {
+        case CAMONL:
+            if (record->event.pressed) { // when keycode CAMONL is pressed
+                obs_camonly = !obs_camonly;
+                if (obs_camonly) {
+                    tap_code16(OBS_CAMONL);
+                } else {
+                    tap_code16(obs_selfie_corners[obs_selected_corner]);
+                }
+            } else { // when keycode CAMONL is released
+            }
+            break;
+        case SB4ACT:
+            if (record->event.pressed) { // when keycode SB4ACT is pressed
+                obs_sb4action = !obs_sb4action;
+                if (obs_sb4action) {
+                    tap_code16(OBS_SB4ACT);
+                } else {
+                    tap_code16(obs_selfie_corners[obs_selected_corner]);
+                }
+            } else { // when keycode SB4ACT is released
+            }
+            break;
+    }
 
     return true;
 }
