@@ -88,9 +88,9 @@ enum {
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_PAREN_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
-    [TD_BRACK_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
-    [TD_CURLY_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
+    [TD_PAREN_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
+    [TD_BRACK_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
+    [TD_CURLY_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
     [TD_PLUS_MINUS_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_MINUS),
     [TD_MULT_DIV_DEF]   = ACTION_TAP_DANCE_DOUBLE(KC_ASTERISK, KC_SLASH),
 };
@@ -325,8 +325,7 @@ bool oled_task_user(void) {
         // Write host Keyboard LED Status to OLEDs
         led_t led_usb_state = host_keyboard_led_state();
         oled_write_P(led_usb_state.num_lock ? PSTR("NUMLCK ") : PSTR("       "), false);
-        oled_write_P(led_usb_state.caps_lock ? PSTR("CAPLCK ") : PSTR("       "),
-                     false);
+        oled_write_P(led_usb_state.caps_lock ? PSTR("CAPLCK ") : PSTR("       "), false);
         oled_write_P(led_usb_state.scroll_lock ? PSTR("SCRLCK ") : PSTR("\n"), false);
         oled_write_P(isRecording ? PSTR("REC") : PSTR("   "), false);
     } else {
@@ -396,8 +395,7 @@ bool    encoder_update_user(uint8_t index, bool clockwise) {
                 clockwise ? tap_code(KC_F3) : tap_code16(S(KC_F3));
                 break;
             default:
-                dprintf("Left Encoder. Rotation: %d. Layer: %d\n", clockwise,
-                           biton32(layer_state));
+                dprintf("Left Encoder. Rotation: %d. Layer: %d\n", clockwise, biton32(layer_state));
         }
 
         // Right Encoder

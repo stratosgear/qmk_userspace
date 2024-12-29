@@ -2,6 +2,7 @@
 
 // Some font designer: https://oleddisplay.squix.ch/#/home
 
+// clang-format off
 // Custom qmk font design from:
 // https://www.1001fonts.com/pixel+bitmap-fonts.html?page=2
 // Font: Light Pixel-7
@@ -232,3 +233,4 @@ const unsigned char font[] PROGMEM = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+// clang-format on

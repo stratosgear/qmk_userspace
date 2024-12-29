@@ -16,7 +16,7 @@
 #include QMK_KEYBOARD_H
 #include "keymap.h"
 #include "features/layersLightshow.h"
-//#include "features/select_word.h"
+// #include "features/select_word.h"
 
 // allows us to output debug messages dprint/dprintf ("%s string", var)
 #include "print.h"
@@ -24,7 +24,6 @@
 // Make special keycodes more visible
 #define ____ KC_TRNS
 #define XXXX KC_NO
-
 
 // Activcate layers
 #define ACT_FUNC MO(L_FUNCTIONAL)
@@ -52,7 +51,6 @@ void leader_end_user(void) {
         SEND_STRING("stratos@gerakakis.net");
     }
 }
-
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -170,8 +168,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // |---1.25---|---1.25----|---1.25----|--------2.25-----------|---1.25---|------2.75---------|---1----|---1----|---1----|---1----|----1---|
 
     };
-    // clang-format on
-
+// clang-format on
 
 // bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 

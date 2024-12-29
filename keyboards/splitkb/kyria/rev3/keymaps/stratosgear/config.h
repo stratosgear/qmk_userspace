@@ -25,12 +25,12 @@
 // #define ENABLE_RGB_MATRIX_PIXEL_FLOW
 
 // RGB Matrix Effect Typing Heatmap
-#define ENABLE_RGB_MATRIX_TYPING_HEATMAP
+#    define ENABLE_RGB_MATRIX_TYPING_HEATMAP
 
 // This effect will color the RGB matrix according to a heatmap of recently
 // pressed keys. Whenever a key is pressed its "temperature" increases as
 // well as that of its neighboring keys. The temperature of each key is
-//then decreased automatically every 25 milliseconds by default.
+// then decreased automatically every 25 milliseconds by default.
 
 // In order to change the delay of temperature decrease define
 // RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS:
@@ -38,7 +38,7 @@
 
 // As heatmap uses the physical position of the leds set in the g_led_config,
 // you may need to tweak the following options to get the best effect for
-//your keyboard. Note the size of this grid is 224x64.
+// your keyboard. Note the size of this grid is 224x64.
 
 // Limit the distance the effect spreads to surrounding keys.
 // #define RGB_MATRIX_TYPING_HEATMAP_SPREAD 40
@@ -57,7 +57,7 @@
 #endif
 
 #ifdef OLED_DRIVER_ENABLE
-    #define OLED_DISPLAY_128X64
+#    define OLED_DISPLAY_128X64
 #endif
 
 // Tap-hold configurations
@@ -71,10 +71,9 @@
 #define LEADER_TIMEOUT 250
 #define LEADER_PER_KEY_TIMING
 
-
 #define DYNAMIC_MACRO_SIZE 1024
 
-//load our own font, with custom QMK logo
+// load our own font, with custom QMK logo
 #define OLED_FONT_H "./font.c"
 
 #define OLED_FADE_OUT

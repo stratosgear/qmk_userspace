@@ -12,6 +12,7 @@
 // reset the leader key timeout after each key press
 #define LEADER_PER_KEY_TIMING
 
+// clang-format off
 // This is as much dynamic macro memory the controller will allow!
 // Even one byte more results in:
 // Compiling: tmk_core/protocol/lufa/usb_util.c                                                        [OK]
@@ -23,4 +24,6 @@
 //  | /nix/store/xdyw5ah9p41yaqfvxg2r1h0kxyc3ldzb-avr-binutils-2.43.1/bin/avr-ld: address 0x800b05 of .build/dz60_stratosgear.elf section `.noinit' is not within region `data'
 //  | collect2: error: ld returned 1 exit status
 // Maybe it depends on the overall memory usage?
-//#define DYNAMIC_MACRO_SIZE 265
+// clang-format on
+
+// #define DYNAMIC_MACRO_SIZE 265
