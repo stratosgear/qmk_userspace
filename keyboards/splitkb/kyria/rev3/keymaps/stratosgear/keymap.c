@@ -69,7 +69,7 @@ enum layers {
 #define LNAV_SPC LT(_NAV, KC_SPC)
 #define LI3_TAB LT(_I3, KC_TAB)
 #define LFUN_ENT LT(_FUN, KC_ENTER)
-#define LSYM_BCK LT(_FUN, KC_BACKSPACE)
+#define LSYM_BCK LT(_SYM, KC_BACKSPACE)
 #define LFN2_DEL LT(_FUN2, KC_DELETE)
 
 // OBS helpers
@@ -279,6 +279,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * DO NOT edit the rev1.c file; instead override the weakly defined default functions by your own.
  */
 bool isRecording = false;
+bool isRecOn = false;
+static uint16_t recOnTime=650;
+static uint16_t recOffTime=350;
+static uint16_t recBlinkLastUpdate;
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_180; }
@@ -294,7 +298,7 @@ bool oled_task_user(void) {
         // clang-format on
 
         oled_write_P(qmk_logo, false);
-        oled_write_P(PSTR("Kyria "), false);
+        oled_write_P(PSTR("Kyria: "), false);
 #    if defined(KEYBOARD_splitkb_kyria_rev1)
         oled_write_P(PSTR("rev1\n\n"), false);
 #    elif defined(KEYBOARD_splitkb_kyria_rev2)
@@ -346,9 +350,27 @@ bool oled_task_user(void) {
         // Write host Keyboard LED Status to OLEDs
         led_t led_usb_state = host_keyboard_led_state();
         oled_write_P(led_usb_state.num_lock ? PSTR("NUMLCK ") : PSTR("       "), false);
-        oled_write_P(led_usb_state.caps_lock ? PSTR("CAPLCK ") : PSTR("       "), false);
+        oled_write_P(led_usb_state.caps_lock ? PSTR("CPSLCK ") : PSTR("       "), false);
         oled_write_P(led_usb_state.scroll_lock ? PSTR("SCRLCK ") : PSTR("\n"), false);
-        oled_write_P(isRecording ? PSTR("REC") : PSTR("   "), false);
+
+        if(isRecording) {
+            if (isRecOn) {
+                if (timer_elapsed(recBlinkLastUpdate) > recOnTime) {
+                    isRecOn = false;
+                    recBlinkLastUpdate = timer_read();
+                };
+                // rgb_matrix_set_color(0, 200, 200, 200);
+            } else {
+                if (timer_elapsed(recBlinkLastUpdate) > recOffTime) {
+                    isRecOn = true;
+                    recBlinkLastUpdate = timer_read();
+                };
+                // rgb_matrix_set_color(0, 20, 20, 20);
+            }
+            oled_write_P(isRecOn ? PSTR("REC") : PSTR("   "), false);
+        } else {
+            oled_write_P(PSTR("   "), false);
+        }
     } else {
         // clang-format off
         static const char PROGMEM hypervasis_logo[] = {
@@ -552,10 +574,13 @@ void leader_end_user(void) {
 // Dynamic recording section
 bool dynamic_macro_record_start_user(int8_t direction) {
     isRecording = true;
+    isRecOn = true;
+    recBlinkLastUpdate = timer_read();
     return true;
 }
 
 bool dynamic_macro_record_end_user(int8_t direction) {
     isRecording = false;
+    isRecOn = false;
     return true;
 }
