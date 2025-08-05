@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "features/select_word.h"
 #include "features/achordion.h"
 
 // allows us to output debug messages dprint/dprintf ("%s string", var)
@@ -92,7 +91,6 @@ bool    obs_camonly            = false;
 bool    obs_sb4action          = false;
 
 enum custom_keycodes {
-    SELWORD = SAFE_RANGE,
     SB4ACT, // OBS: Standby for action scen toggle
     CAMONL  // OBS: Camera Only scene toggle
     // Other custom keys...
@@ -496,10 +494,6 @@ bool    encoder_update_user(uint8_t index, bool clockwise) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     if (!process_achordion(keycode, record)) {
-        return false;
-    }
-
-    if (!process_select_word(keycode, record, SELWORD)) {
         return false;
     }
 
