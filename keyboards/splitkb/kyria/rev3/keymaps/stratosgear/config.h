@@ -61,7 +61,15 @@
 #endif
 
 // Tap-hold configurations
-#define TAPPING_TERM 200
+// Using suggested settings from:
+// https://getreuer.info/posts/keyboards/faqs/index.html#home-row-mods-are-hard-to-use
+#define TAPPING_TERM 250
+
+// QMK default implementation of the legacy Achordion
+#define CHORDAL_HOLD
+
+#define PERMISSIVE_HOLD
+
 // #define IGNORE_MOD_TAP_INTERRUPT
 
 // Fixes clockwise/anticlockwise detection
@@ -78,5 +86,8 @@
 
 #define OLED_FADE_OUT
 #define OLED_FADE_OUT_INTERVAL 15
+
+// define quadratic speed
+#define MK_KINETIC_SPEED
 
 #define CAPS_WORD_INVERT_ON_SHIFT

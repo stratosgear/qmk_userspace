@@ -14,7 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
-#include "features/achordion.h"
 
 // allows us to output debug messages dprint/dprintf ("%s string", var)
 #include "print.h"
@@ -64,6 +63,9 @@ enum layers {
 #define TD_PAREN TD(TD_PAREN_DEF)
 #define TD_BRACK TD(TD_BRACK_DEF)
 #define TD_CURLY TD(TD_CURLY_DEF)
+#define TD_QUOTE TD(TD_SINGLE_QUOTE_DEF)
+#define TD_DQUOTE TD(TD_DOUBLE_QUOTE_DEF)
+#define TD_UN_RD TD(TD_UNDO_REDO_DEF)
 #define LNUM_ESC LT(_NUM, KC_ESC)
 #define LNAV_SPC LT(_NAV, KC_SPC)
 #define LI3_TAB LT(_I3, KC_TAB)
@@ -103,15 +105,21 @@ enum {
     TD_CURLY_DEF,
     TD_PLUS_MINUS_DEF,
     TD_MULT_DIV_DEF,
+    TD_SINGLE_QUOTE_DEF,
+    TD_DOUBLE_QUOTE_DEF,
+    TD_UNDO_REDO_DEF,
 };
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    [TD_PAREN_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
-    [TD_BRACK_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
-    [TD_CURLY_DEF]      = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
-    [TD_PLUS_MINUS_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_MINUS),
-    [TD_MULT_DIV_DEF]   = ACTION_TAP_DANCE_DOUBLE(KC_ASTERISK, KC_SLASH),
+    [TD_PAREN_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
+    [TD_BRACK_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
+    [TD_CURLY_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
+    [TD_PLUS_MINUS_DEF]   = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_MINUS),
+    [TD_MULT_DIV_DEF]     = ACTION_TAP_DANCE_DOUBLE(KC_ASTERISK, KC_SLASH),
+    [TD_SINGLE_QUOTE_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_GRAVE, KC_QUOTE),
+    [TD_DOUBLE_QUOTE_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_BSLS, S(KC_QUOTE)),
+    [TD_UNDO_REDO_DEF]    = ACTION_TAP_DANCE_DOUBLE(C(KC_Z), C(KC_Y)),
 };
 
 // clang-format off
@@ -123,9 +131,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  * |--------+--------+--------+--------+--------+--------|                                      |--------+--------+--------+--------+--------+--------|
        TD_BRACK,MEH_T(KC_A),ALT_T(KC_R),CTL_T(KC_S),SFT_T(KC_T),GUI_T(KC_G),                       GUI_T(KC_M),SFT_T(KC_N),CTL_T(KC_E),ALT_T(KC_I),MEH_T(KC_O), KC_CUT ,
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
-       TD_CURLY,   KC_Z ,   KC_X ,   KC_C ,   KC_D ,   KC_V ,KC_MINUS,KC_EQUAL,   KC_GRAVE, KC_BSLS,   KC_K ,   KC_H , KC_COMM,  KC_DOT, KC_SLSH,KC_PASTE,
+       TD_CURLY,   KC_Z ,   KC_X ,   KC_C ,   KC_D ,   KC_V ,KC_MINUS,KC_EQUAL,   TD_QUOTE, TD_DQUOTE, KC_K ,   KC_H , KC_COMM,  KC_DOT, KC_SLSH,KC_PASTE,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
-                                    KC_A  ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   KC_B
+                                  C(KC_Y) ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   C(KC_Z)
 //  *                             *.____,*`--------+--------+--------+--------'  `--------+--------+--------+--------'*.____,*
     ),
 
@@ -137,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
        KC_LSFT ,   KC_Z ,  KC_X  ,  KC_C  ,   KC_V ,   KC_B , KC_LBRC, KC_CAPS,      FUN  , KC_RBRC,    KC_N,   KC_M ,KC_COMM, KC_DOT ,  KC_SLSH, KC_RSFT,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
-                                    KC_A  ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   KC_B
+                                  C(KC_Y) ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   C(KC_Z)
 //  *                             *.____,*`--------+--------+--------+--------'  `--------+--------+--------+--------'*.____,*
     ),
 
@@ -149,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
        KC_LSFT ,KC_SCLN ,   KC_Q ,   KC_J ,   KC_K ,   KC_X , KC_LBRC,KC_CAPS,        FUN , KC_RBRC,   KC_B ,   KC_M ,   KC_W ,   KC_V ,   KC_Z , KC_RSFT,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
-                                    KC_A  ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   KC_B
+                                 C(KC_Y) ,  MOUSE ,LNUM_ESC,LNAV_SPC, LI3_TAB,   LFUN_ENT,LSYM_BCK,LFN2_DEL,   SYS ,   C(KC_Z)
 //  *                             *.____,*`--------+--------+--------+--------'  `--------+--------+--------+--------'*.____,*
     ),
 
@@ -161,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
         _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, KC_PAUSE, _______, SELWORD, _______, _______, KC_SCROLL_LOCK,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
-                                   _______, _______, _______, _______, _______,     KC_ENT, KC_BSPC,  KC_SPC,  KC_TAB, _______
+                                   _______, _______, _______, _______, _______,    _______, _______, _______,TD_UN_RD, _______
 //  *                             *.____,*`--------+--------+---XXX--+--------'  `--------+--------+--------+--------'*.____,*
     ),
 
@@ -227,13 +235,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MOUSE] = LAYOUT(
 //  * ,--------+--------+--------+--------+--------+--------.                                      ,--------+--------+--------+--------+--------+--------.
-        _______, _______, _______, _______, _______, _______,                                        KC_WH_U, _______, KC_MS_U, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                                        _______, _______, _______, _______, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------|                                      |--------+--------+--------+--------+--------+--------|
-        _______, _______, _______, _______, _______, _______,                                        KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
+        _______, _______, _______, _______, _______, _______,                                        KC_WH_U, KC_MS_L, KC_MS_U, KC_MS_R, _______, _______,
 //  * |--------+--------+--------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------+--------|
-        _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______,    _______, _______, KC_WH_D, _______, KC_MS_D, _______, _______, _______,
 //  * `--------+--------+--------+-,=====.+--------+--------+--------+--------|  |--------+--------+--------+--------+-,=====.+--------+--------+--------'
-                                   _______, _______, _______, _______, _______,    KC_BTN1, KC_BTN3, KC_BTN2, _______, _______
+                                   _______, _______, _______, _______, _______,    KC_BTN3, KC_BTN1, KC_BTN2, _______, _______
 //  *                             *.____,*`---XXX--+--------+--------+--------'  `--------+--------+--------+--------'*.____,*
     ),
 
@@ -351,16 +359,16 @@ bool oled_task_user(void) {
         oled_write_P(led_usb_state.caps_lock ? PSTR("CPSLCK ") : PSTR("       "), false);
         oled_write_P(led_usb_state.scroll_lock ? PSTR("SCRLCK ") : PSTR("\n"), false);
 
-        if(isRecording) {
+        if (isRecording) {
             if (isRecOn) {
                 if (timer_elapsed(recBlinkLastUpdate) > recOnTime) {
-                    isRecOn = false;
+                    isRecOn            = false;
                     recBlinkLastUpdate = timer_read();
                 };
                 // rgb_matrix_set_color(0, 200, 200, 200);
             } else {
                 if (timer_elapsed(recBlinkLastUpdate) > recOffTime) {
-                    isRecOn = true;
+                    isRecOn            = true;
                     recBlinkLastUpdate = timer_read();
                 };
                 // rgb_matrix_set_color(0, 20, 20, 20);
@@ -493,9 +501,9 @@ bool    encoder_update_user(uint8_t index, bool clockwise) {
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-    if (!process_achordion(keycode, record)) {
-        return false;
-    }
+    // if (!process_achordion(keycode, record)) {
+    //     return false;
+    // }
 
     switch (keycode) {
         case CAMONL:
@@ -525,18 +533,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     return true;
 }
 
-// Added just for Achordion feature
-// https://getreuer.info/posts/keyboards/achordion/
-void matrix_scan_user(void) {
-    achordion_task();
-}
+// // Added just for Achordion feature
+// // https://getreuer.info/posts/keyboards/achordion/
+// void matrix_scan_user(void) {
+//     achordion_task();
+// }
 
-bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
-                     uint16_t other_keycode, keyrecord_t* other_record) {
-    // Accepts more configurations
-    // See: https://getreuer.info/posts/keyboards/achordion/
-    return achordion_opposite_hands(tap_hold_record, other_record);
-}
+// bool achordion_chord(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
+//                      uint16_t other_keycode, keyrecord_t* other_record) {
+//     // Accepts more configurations
+//     // See: https://getreuer.info/posts/keyboards/achordion/
+//     return achordion_opposite_hands(tap_hold_record, other_record);
+// }
 
 // bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //   // If console is enabled, it will print the matrix position and status of each key
@@ -567,14 +575,14 @@ void leader_end_user(void) {
 
 // Dynamic recording section
 bool dynamic_macro_record_start_user(int8_t direction) {
-    isRecording = true;
-    isRecOn = true;
+    isRecording        = true;
+    isRecOn            = true;
     recBlinkLastUpdate = timer_read();
     return true;
 }
 
 bool dynamic_macro_record_end_user(int8_t direction) {
     isRecording = false;
-    isRecOn = false;
+    isRecOn     = false;
     return true;
 }
