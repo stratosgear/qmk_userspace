@@ -12,7 +12,7 @@ LTO_ENABLE = yes
 
 
 # AUDIO_SETUP
-AUDIO_ENABLE = yes
+AUDIO_ENABLE = no
 AUDIO_DRIVER = pwm_hardware
 
 

@@ -9,10 +9,20 @@
 #define SERIAL_USART_TX_PIN GP1
 #define SERIAL_USART_RX_PIN GP0
 
-// set keybard half handness (left/right) by writting to the EEPROM
-// https://docs.qmk.fm/features/split_keyboard#handedness-by-eeprom
-#define EE_HANDS
+// set keyboard half handness (left/right)
+// Left: pinned to 3.3V
+// Right: pinned to GND
+// https://docs.qmk.fm/features/split_keyboard#handedness-by-pin
+#define SPLIT_HAND_PIN GP23
 
+
+// ┌─────────────────────────────────────────────────┐
+// │ B O O T M A G I C                               │
+// └─────────────────────────────────────────────────┘
+#define BOOTMAGIC_ROW 0
+#define BOOTMAGIC_COLUMN 5
+#define BOOTMAGIC_ROW_RIGHT 4
+#define BOOTMAGIC_COLUMN_RIGHT 0
 
 // ┌─────────────────────────────────────────────────┐
 // │ E N C O D E R S                                 │
