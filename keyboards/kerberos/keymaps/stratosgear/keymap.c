@@ -1,5 +1,18 @@
-// Copyright 2023 QMK
-// SPDX-License-Identifier: GPL-2.0-or-later
+/* Copyright 2025 Stratos Gerakakis <stratos@gerakakis.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include QMK_KEYBOARD_H
 
@@ -17,6 +30,90 @@ enum layers {
     _NUM,
     _MOUSE,
     _SYS,
+};
+
+
+// Aliases for readability
+#define COLEMAK DF(_COLEMAK_DH)
+#define QWERTY DF(_QWERTY)
+
+// Major insrpiration from Miryoku Layers
+// https://github.com/manna-harbour/miryoku/tree/master/docs/reference
+
+#define NAV MO(_NAV)
+#define I3 MO(_I3)
+#define MOUSE MO(_MOUSE)
+#define SYM MO(_SYM)
+#define NUM MO(_NUM)
+#define FUN MO(_FUN)
+#define FUN2 MO(_FUN2)
+#define SYS MO(_SYS)
+
+#define CTL_ESC MT(MOD_LCTL, KC_ESC)
+#define CTL_QUOT MT(MOD_RCTL, KC_QUOTE)
+#define CTL_MINS MT(MOD_RCTL, KC_MINUS)
+#define TD_PL_MN TD(TD_PLUS_MINUS_DEF)
+#define TD_ML_DV TD(TD_MULT_DIV_DEF)
+#define TD_PAREN TD(TD_PAREN_DEF)
+#define TD_BRACK TD(TD_BRACK_DEF)
+#define TD_CURLY TD(TD_CURLY_DEF)
+#define TD_QUOTE TD(TD_SINGLE_QUOTE_DEF)
+#define TD_DQUOTE TD(TD_DOUBLE_QUOTE_DEF)
+#define TD_UN_RD TD(TD_UNDO_REDO_DEF)
+#define LNUM_ESC LT(_NUM, KC_ESC)
+#define LNAV_SPC LT(_NAV, KC_SPC)
+#define LI3_TAB LT(_I3, KC_TAB)
+#define LFUN_ENT LT(_FUN, KC_ENTER)
+#define LSYM_BCK LT(_SYM, KC_BACKSPACE)
+#define LFN2_DEL LT(_FUN2, KC_DELETE)
+
+// OBS helpers
+// Reminder: Any keycodes emitted will have to be captured by wayland (hyprland in this case)
+// and dealt with as Global keybinds
+// https://wiki.hyprland.org/hyprland-wiki/pages/Configuring/Binds/#global-keybinds
+#define OBS_SB4ACT G(KC_F12)    // Stand by for action
+#define OBS_CAMONL S(G(KC_F12)) // Camera Only
+
+uint8_t  obs_selected_corner  = 2;
+uint16_t obs_selfie_corners[] = {
+    S(KC_F12),    // selfie appears at top left
+    C(KC_F12),    // selfie appears at top right
+    A(KC_F12),    // selfie appears at bottom right
+    S(C(KC_F12)), // selfie appears at bottom left
+    S(A(KC_F12)), // selfie dissapears
+};
+uint8_t obs_max_selfie_corners = 5;
+bool    obs_camonly            = false;
+bool    obs_sb4action          = false;
+
+enum custom_keycodes {
+    SB4ACT, // OBS: Standby for action scene toggle
+    CAMONL  // OBS: Camera Only scene toggle
+    // Other custom keys...
+};
+
+// Tap Dance declarations
+enum {
+    TD_PAREN_DEF,
+    TD_BRACK_DEF,
+    TD_CURLY_DEF,
+    TD_PLUS_MINUS_DEF,
+    TD_MULT_DIV_DEF,
+    TD_SINGLE_QUOTE_DEF,
+    TD_DOUBLE_QUOTE_DEF,
+    TD_UNDO_REDO_DEF,
+};
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_PAREN_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
+    [TD_BRACK_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
+    [TD_CURLY_DEF]        = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
+    [TD_PLUS_MINUS_DEF]   = ACTION_TAP_DANCE_DOUBLE(KC_PLUS, KC_MINUS),
+    [TD_MULT_DIV_DEF]     = ACTION_TAP_DANCE_DOUBLE(KC_ASTERISK, KC_SLASH),
+    [TD_SINGLE_QUOTE_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_GRAVE, KC_QUOTE),
+    [TD_DOUBLE_QUOTE_DEF] = ACTION_TAP_DANCE_DOUBLE(KC_BSLS, S(KC_QUOTE)),
+    [TD_UNDO_REDO_DEF]    = ACTION_TAP_DANCE_DOUBLE(C(KC_Z), C(KC_Y)),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {

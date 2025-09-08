@@ -22,3 +22,10 @@
 #define RP_I2C_USE_I2C0 TRUE
 #undef RP_I2C_USE_I2C1
 #define RP_I2C_USE_I2C1 FALSE
+
+
+/* Enable PWM Driver 7 */
+#ifdef AUDIO_ENABLE
+    #undef RP_PWM_USE_PWM3
+    #define RP_PWM_USE_PWM3 TRUE
+#endif

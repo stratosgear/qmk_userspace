@@ -13,7 +13,11 @@
 // https://docs.qmk.fm/features/split_keyboard#handedness-by-eeprom
 #define EE_HANDS
 
-// ENCODERS_SETUP
+
+// ┌─────────────────────────────────────────────────┐
+// │ E N C O D E R S                                 │
+// └─────────────────────────────────────────────────┘
+
 #define ENCODER_A_PINS { GP17 }
 #define ENCODER_B_PINS { GP16 }
 // #define ENCODER_DIRECTION_FLIP
@@ -21,7 +25,10 @@
 #define ENCODER_DEFAULT_POS 0x3
 
 
-// OLED_SETUP
+
+// ┌─────────────────────────────────────────────────┐
+// │ O L E D  Display                                │
+// └─────────────────────────────────────────────────┘
 
 // load our own font, with custom QMK logo
 #define OLED_FONT_H "./font.c"
@@ -38,3 +45,25 @@
 #define OLED_TIMEOUT 60000
 
 #define SPLIT_OLED_ENABLE
+
+
+
+
+// ┌─────────────────────────────────────────────────┐
+// │ a u d i o                                       │
+// └─────────────────────────────────────────────────┘
+
+#ifdef AUDIO_ENABLE
+    #define AUDIO_PIN GP22
+    #define AUDIO_PWM_DRIVER PWMD3
+    #define AUDIO_PWM_CHANNEL RP2040_PWM_CHANNEL_A
+    #define AUDIO_INIT_DELAY
+    // #define AUDIO_DAC_SAMPLE_MAX 3071U
+    // #define AUDIO_DAC_SAMPLE_MAX 1023U
+
+    #define KLOR_SOUND W__NOTE(_DS0), W__NOTE(_DS1), H__NOTE(_DS2), H__NOTE(_DS3), Q__NOTE(_DS4), Q__NOTE(_DS5), E__NOTE(_DS6), E__NOTE(_DS7), S__NOTE(_DS8), Q__NOTE(_GS0)
+    #define STARTUP_SONG SONG(KLOR_SOUND)
+    #define BYE_SOUND H__NOTE(_DS4), H__NOTE(_DS3), W__NOTE(_DS1)
+    #define GOODBYE_SONG SONG(BYE_SOUND)
+    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), SONG(COLEMAK_SOUND) }
+#endif

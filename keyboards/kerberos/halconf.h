@@ -18,4 +18,10 @@
 
 #define HAL_USE_I2C TRUE
 
+/* Enable PWM */
+#ifdef AUDIO_ENABLE
+    #define HAL_USE_PWM                 TRUE
+    #define HAL_USE_PAL                 TRUE
+#endif
+
 #include_next <halconf.h>
