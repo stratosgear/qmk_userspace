@@ -12,7 +12,7 @@ LTO_ENABLE = yes
 
 
 # AUDIO_SETUP
-AUDIO_ENABLE = no
+AUDIO_ENABLE = yes
 AUDIO_DRIVER = pwm_hardware
 
 
@@ -27,3 +27,8 @@ DYNAMIC_MACRO_ENABLE = yes
 DYNAMIC_TAPPING_TERM_ENABLE = yes
 
 CAPS_WORD_ENABLE = yes
+
+LAYER_LOCK_ENABLE = yes
+
+# Talk with host computer
+RAW_ENABLE = yes

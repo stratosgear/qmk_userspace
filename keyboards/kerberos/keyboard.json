@@ -28,8 +28,8 @@
     "url": "https://github.com/stratosgear/qmk_userspace",
     "usb": {
         "device_version": "1.0.0",
-        "pid": "0x2025",
-        "vid": "0x0907"
+        "vid": "0x5784",
+        "pid": "0x0001"
     },
     "layouts": {
         "LAYOUT": {

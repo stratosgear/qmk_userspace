@@ -9,11 +9,24 @@
 #define SERIAL_USART_TX_PIN GP1
 #define SERIAL_USART_RX_PIN GP0
 
+
+// ┌─────────────────────────────────────────────────┐
+// │ S P L I T   K E Y B O A R D                     │
+// └─────────────────────────────────────────────────┘
+
 // set keyboard half handness (left/right)
 // Left: pinned to 3.3V
 // Right: pinned to GND
 // https://docs.qmk.fm/features/split_keyboard#handedness-by-pin
 #define SPLIT_HAND_PIN GP23
+
+
+// ┌─────────────────────────────────────────────────┐
+// │ R A W   I N T E R F A C E                       │
+// └─────────────────────────────────────────────────┘
+
+#define RAW_USAGE_PAGE	  0xFF60	// The usage page of the Raw HID interface
+#define RAW_USAGE_ID	  0x61	    // The usage ID of the Raw HID interface
 
 
 // ┌─────────────────────────────────────────────────┐
@@ -35,6 +48,15 @@
 #define ENCODER_DEFAULT_POS 0x3
 
 
+// ┌─────────────────────────────────────────────────┐
+// │ L E A D E R S   /  M A C R O S                  │
+// └─────────────────────────────────────────────────┘
+
+#define LEADER_NO_TIMEOUT
+#define LEADER_TIMEOUT 500
+#define LEADER_PER_KEY_TIMING
+
+#define DYNAMIC_MACRO_SIZE 1024
 
 // ┌─────────────────────────────────────────────────┐
 // │ O L E D  Display                                │
